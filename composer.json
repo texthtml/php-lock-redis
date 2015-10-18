@@ -1,0 +1,23 @@
+{
+    "name": "texthtml/php-lock-redis",
+    "description" : "redis lock",
+    "license": "aGPLv3",
+    "type": "library",
+    "autoload": {
+        "psr-4": { "TH\\RedisLock\\": "src" }
+    },
+    "authors": [
+        {
+            "name": "Mathieu Rochette",
+            "email": "mathieu@rochette.cc"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "require": {
+        "texthtml/php-lock": "~2.0",
+        "predis/predis": "~1.0",
+        "psr/log": "~1.0"
+    }
+}
