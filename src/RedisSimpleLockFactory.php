@@ -5,8 +5,9 @@ namespace TH\RedisLock;
 use Predis\Client;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use TH\Lock\TtlFactory;
 
-class RedisSimpleLockFactory
+class RedisSimpleLockFactory implements TtlFactory
 {
     private $client;
     private $defaultTtl;
