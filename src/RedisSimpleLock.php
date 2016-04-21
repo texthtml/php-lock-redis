@@ -32,6 +32,8 @@ class RedisSimpleLock implements Lock
         $this->ttl        = $ttl;
         $this->logger     = $logger ?: new NullLogger;
         $this->id         = mt_rand();
+        register_shutdown_function($closure = $this->releaseClosure());
+        pcntl_signal(SIGINT, $closure);
     }
 
     public function acquire()
@@ -48,18 +50,32 @@ class RedisSimpleLock implements Lock
 
     public function release()
     {
-        $script = <<<LUA
-    if redis.call("get", KEYS[1]) == ARGV[1] then
-        return redis.call("del", KEYS[1])
-    end
-LUA;
-        if ($this->client->eval($script, 1, $this->identifier, $this->id)) {
-            $this->logger->debug("lock released on {identifier}", ["identifier" => $this->identifier]);
-        }
+        $closure = $this->releaseClosure();
+        $closure();
     }
 
     public function __destruct()
     {
         $this->release();
+    }
+
+    private function releaseClosure()
+    {
+        $client = $this->client;
+        $id = $this->id;
+        $identifier = $this->identifier;
+        $logger = $this->logger;
+
+        $closure = function () use ($client, $identifier, $id, $logger) {
+            $script = <<<LUA
+    if redis.call("get", KEYS[1]) == ARGV[1] then
+        return redis.call("del", KEYS[1])
+    end
+LUA;
+            if ($client->eval($script, 1, $identifier, $id)) {
+                $logger->debug("lock released on {identifier}", ["identifier" => $identifier]);
+            }
+        };
+        return $closure->bindTo(null);
     }
 }
