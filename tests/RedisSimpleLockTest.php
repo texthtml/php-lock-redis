@@ -47,7 +47,7 @@ class RedisSimpleLockTest extends PHPUnit_Framework_TestCase
         $lock1->release();
 
         // lock should still exists
-        $this->assertTrue($this->redisClient->exists("lock identifier"), "Lock should not have been released");
+        $this->assertTrue($this->redisClient->exists("lock identifier") === 1, "Lock should not have been released");
     }
 
     public function testLockRelease()
