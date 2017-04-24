@@ -109,6 +109,8 @@ LUA;
 
     public function release()
     {
-        $this->releaseClosure()();
+        $closure = $this->releaseClosure();
+
+        $closure();
     }
 }
