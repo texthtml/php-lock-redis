@@ -7,6 +7,11 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use TH\Lock\TtlFactory;
 
+/**
+ * Class RedisSimpleLockFactory
+ *
+ * @package TH\RedisLock
+ */
 class RedisSimpleLockFactory implements TtlFactory
 {
     private $client;
@@ -15,16 +20,16 @@ class RedisSimpleLockFactory implements TtlFactory
 
     public function __construct(Client $client, $defaultTtl = 10000, LoggerInterface $logger = null)
     {
-        $this->client     = $client;
+        $this->client = $client;
         $this->defaultTtl = $defaultTtl;
-        $this->logger     = $logger ?: new NullLogger;
+        $this->logger = $logger ?: new NullLogger;
     }
 
     /**
      * Create a new RedisSimpleLock
      *
      * @param string  $identifier the redis lock key
-     * @param integer $ttl        lock time-to-live in milliseconds
+     * @param integer $ttl lock time-to-live in milliseconds
      *
      * @return RedisSimpleLock
      */
