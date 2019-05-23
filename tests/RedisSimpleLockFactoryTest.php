@@ -19,8 +19,10 @@ class RedisSimpleLockFactoryTest extends PHPUnit_Framework_TestCase
         $lock = $factory->create('lock identifier');
         $this->assertInstanceOf(RedisSimpleLock::class, $lock);
 
-        $handler = pcntl_signal_get_handler(SIGINT);
-        $this->assertEmpty($handler);
+        if (function_exists('pcntl_signal_get_handler')) {
+            $handler = pcntl_signal_get_handler(SIGINT);
+            $this->assertEmpty($handler);
+        }
     }
 
     public function testCreateLock()
@@ -29,7 +31,9 @@ class RedisSimpleLockFactoryTest extends PHPUnit_Framework_TestCase
         $lock = $factory->create('lock identifier');
         $this->assertInstanceOf(RedisSimpleLock::class, $lock);
 
-        $handler = pcntl_signal_get_handler(SIGINT);
-        $this->assertInstanceOf(Closure::class, $handler);
+        if (function_exists('pcntl_signal_get_handler')) {
+            $handler = pcntl_signal_get_handler(SIGINT);
+            $this->assertInstanceOf(Closure::class, $handler);
+        }
     }
 }
