@@ -13,7 +13,7 @@ class RedisSimpleLockFactoryTest extends PHPUnit_Framework_TestCase
         $this->redisClient->flushdb();
     }
 
-    public function testCreateIgnoredSapisLock()
+    public function testCreateIgnoredSAPIsLock()
     {
         $factory = new RedisSimpleLockFactory($this->redisClient, 50, null, [php_sapi_name()]);
         $lock = $factory->create('lock identifier');
