@@ -24,8 +24,9 @@ class RedisSimpleLock implements Lock
      * @param Client               $client     the Predis client
      * @param integer              $ttl        lock time-to-live in milliseconds
      * @param LoggerInterface|null $logger
+     * @param array                $ignoredSAPIs the server apis to ignore the pcntl_signal callback for
      */
-    public function __construct($identifier, Client $client, $ttl = 10000, LoggerInterface $logger = null)
+    public function __construct($identifier, Client $client, $ttl = 10000, LoggerInterface $logger = null, array $ignoredSAPIs = [])
     {
         $this->identifier = $identifier;
         $this->client     = $client;
@@ -33,7 +34,13 @@ class RedisSimpleLock implements Lock
         $this->logger     = $logger ?: new NullLogger;
         $this->id         = mt_rand();
         register_shutdown_function($closure = $this->releaseClosure());
-        pcntl_signal(SIGINT, $closure);
+
+        if (!in_array(php_sapi_name(), $ignoredSAPIs)) {
+            if (!function_exists('pcntl_signal')) {
+                throw new \RuntimeException("pcntl_signal() from the pcntl extension is not availlable, configure `$ignoredSAPIs = ['".php_sapi_name()."']` to skip catching SIGINT signal.");
+            }
+            pcntl_signal(SIGINT, $closure);
+        }
     }
 
     public function acquire()
