@@ -12,12 +12,14 @@ class RedisSimpleLockFactory implements TtlFactory
     private $client;
     private $defaultTtl;
     private $logger;
+    private $ignoredSapis;
 
-    public function __construct(Client $client, $defaultTtl = 10000, LoggerInterface $logger = null)
+    public function __construct(Client $client, $defaultTtl = 10000, LoggerInterface $logger = null, array $ignoredSapis = [])
     {
-        $this->client     = $client;
-        $this->defaultTtl = $defaultTtl;
-        $this->logger     = $logger ?: new NullLogger;
+        $this->client       = $client;
+        $this->defaultTtl   = $defaultTtl;
+        $this->logger       = $logger ?: new NullLogger;
+        $this->ignoredSapis = $ignoredSapis;
     }
 
     /**
@@ -30,6 +32,6 @@ class RedisSimpleLockFactory implements TtlFactory
      */
     public function create($identifier, $ttl = null)
     {
-        return new RedisSimpleLock($identifier, $this->client, $ttl ?: $this->defaultTtl, $this->logger);
+        return new RedisSimpleLock($identifier, $this->client, $ttl ?: $this->defaultTtl, $this->logger, $this->ignoredSapis);
     }
 }
