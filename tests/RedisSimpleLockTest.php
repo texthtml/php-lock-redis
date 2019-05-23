@@ -12,6 +12,17 @@ class RedisSimpleLockTest extends PHPUnit_Framework_TestCase
         $this->redisClient->flushdb();
     }
 
+    public function testSAPIIgnore()
+    {
+        $lock1 = new RedisSimpleLock("lock identifier", $this->redisClient, 50, null, [php_sapi_name()]);
+        $handler = pcntl_signal_get_handler(SIGINT);
+        $this->assertEmpty($handler);
+
+        $lock2 = new RedisSimpleLock("lock identifier", $this->redisClient, 50, null);
+        $handler = pcntl_signal_get_handler(SIGINT);
+        $this->assertInstanceOf(Closure::class, $handler);
+    }
+
     public function testLock()
     {
         $lock1 = new RedisSimpleLock("lock identifier", $this->redisClient, 50);
@@ -72,16 +83,5 @@ class RedisSimpleLockTest extends PHPUnit_Framework_TestCase
 
         // first lock sould have been released
         $lock2->acquire();
-    }
-
-    public function testSAPIIgnore()
-    {
-        $lock1 = new RedisSimpleLock("lock identifier", $this->redisClient, 50, null, [php_sapi_name()]);
-        $handler = pcntl_signal_get_handler(SIGINT);
-        $this->assertEmpty($handler);
-
-        $lock2 = new RedisSimpleLock("lock identifier", $this->redisClient, 50, null);
-        $handler = pcntl_signal_get_handler(SIGINT);
-        $this->assertInstanceOf(Closure::class, $handler);
     }
 }
