@@ -21,7 +21,7 @@ class RedisSimpleLockTest extends TestCase
         $lock1->acquire();
 
         // Only the second acquire is supposed to fail
-        $this->setExpectedException("Exception");
+        $this->expectException("Exception");
         $lock2->acquire();
     }
 
