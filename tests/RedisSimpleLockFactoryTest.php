@@ -1,13 +1,14 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use TH\RedisLock\RedisSimpleLock;
 use TH\RedisLock\RedisSimpleLockFactory;
 
-class RedisSimpleLockFactoryTest extends PHPUnit_Framework_TestCase
+class RedisSimpleLockFactoryTest extends TestCase
 {
     private $redisClient;
 
-    protected function setUp()
+    public function setUp(): void
     {
         $this->redisClient = new \Predis\Client(getenv('REDIS_URI'));
         $this->redisClient->flushdb();
