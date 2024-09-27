@@ -8,7 +8,7 @@ class RedisSimpleLockFactoryTest extends TestCase
 {
     private $redisClient;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->redisClient = new \Predis\Client(getenv('REDIS_URI'));
         $this->redisClient->flushdb();
