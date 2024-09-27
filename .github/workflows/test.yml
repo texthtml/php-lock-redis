@@ -54,7 +54,6 @@ jobs:
       - name: Run the unit tests
         run: |
           vendor/bin/phpunit
-
     services:
       redis:
         image: redis:7.4
