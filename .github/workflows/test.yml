@@ -46,7 +46,6 @@ jobs:
         run: |
           vendor/bin/phpunit --version
           vendor/bin/phpunit --testdox
-
     services:
       redis:
         image: redis:7.4
