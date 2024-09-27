@@ -1,8 +1,9 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use TH\RedisLock\RedisSimpleLock;
 
-class RedisSimpleLockTest extends PHPUnit_Framework_TestCase
+class RedisSimpleLockTest extends TestCase
 {
     private $redisClient;
 
