@@ -19,6 +19,6 @@
         "ext-pcntl": "*",
         "texthtml/php-lock": "~2.1",
         "predis/predis": "~1.0",
-        "psr/log": "~1.0"
+        "psr/log": "~3.0"
     }
 }
