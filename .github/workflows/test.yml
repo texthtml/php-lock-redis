@@ -54,6 +54,6 @@ jobs:
 
     services:
       redis:
-        image: redis:8.2
+        image: redis:8.4
         ports:
           - 6379:6379
